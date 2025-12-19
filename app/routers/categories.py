@@ -23,7 +23,7 @@ async def get_categories(current_user: UserModel = Depends(get_current_user)):
         detail="No categories were found",
         headers={"WWW-Authenticate": "Bearer"}
     )
-
+ 
 @router.post("")
 async def create_category(category: CategoryCreate, current_user: UserModel = Depends(require_admin)):
     old_category = await get_category_by_name(category.name)
