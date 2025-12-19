@@ -1,4 +1,5 @@
-import datetime
+
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
@@ -17,6 +18,6 @@ class CategoryUpdate(CategoryBase):
 class CategoryOut(CategoryBase):
     id: int
     created_at: datetime
-    updated_at: datetime
+    updated_at: Optional[datetime] | None = None
 
     model_config = ConfigDict(from_attributes=True)
