@@ -28,6 +28,10 @@ async def get_current_user(token_data: TokenPayload = Depends(decode_and_validat
 
 async def require_admin(user: UserModel = Depends(get_current_user)):
     if user.role != "admin":
-        return False
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have access here, admin role is required.",
+            headers={"WWW-Authenticate": "Bearer."}
+        )
     return user
 

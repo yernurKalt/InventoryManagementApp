@@ -19,7 +19,7 @@ router = APIRouter(
     )
 
 
-@router.post("/login")
+@router.post("/login", response_model=Token)
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     email = form_data.username
     async with async_session_maker() as session:
