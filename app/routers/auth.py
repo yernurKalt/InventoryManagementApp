@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy import select
 
-from app.core.security.password import hash_password
+from app.core.security.password import hash_password, verify_password
 from app.core.security.tokens import create_access_token
 from app.db.config import settings
 from app.db.db import async_session_maker
@@ -30,6 +30,12 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"Could not find user with email {email}"
+            )
+        if not verify_password(form_data.password, user.hashed_password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Wrong password",
+                headers={"WWW-Authenticate": "Bearer"}
             )
         access_token_expires = timedelta(minutes=settings.EXPIRE_MINUTES)
         access_token = create_access_token(

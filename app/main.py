@@ -11,15 +11,13 @@ from pydantic import BaseModel
 from app.api.deps import get_current_user, require_admin
 from app.models.user import UserModel
 from app.routers.auth import router as login_router
+from app.routers.users import router as users_router
+from app.routers.categories import router as categories_router
 from app.schemas.user import UserOut
 
 
 app = FastAPI()
 
 app.include_router(login_router)
-
-
-@app.get("/me")
-async def me(current_user: UserModel = Depends(require_admin)):
-    user = UserOut.model_validate(current_user)
-    return user.model_dump()
+app.include_router(users_router)
+app.include_router(categories_router)

@@ -12,7 +12,7 @@ class CategoryModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
-    description: Mapped[str]
-    created_at: Mapped[datetime]
-    updated_at: Mapped[datetime]
-    products: Mapped[List["ProductModel"]] = relationship(back_populates="category")
+    description: Mapped[str] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
+    updated_at: Mapped[datetime] = mapped_column(nullable=True)
+    
