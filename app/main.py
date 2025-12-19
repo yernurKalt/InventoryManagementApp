@@ -1,0 +1,25 @@
+from datetime import datetime, timedelta, timezone
+from typing import Annotated
+
+import jwt
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jwt.exceptions import InvalidTokenError
+from pwdlib import PasswordHash
+from pydantic import BaseModel
+
+from app.api.deps import get_current_user
+from app.models.user import UserModel
+from app.routers.auth import router as login_router
+from app.schemas.user import UserOut
+
+
+app = FastAPI()
+
+app.include_router(login_router)
+
+
+@app.get("/me")
+async def me(current_user: UserModel = Depends(get_current_user)):
+    user = UserOut.model_validate(current_user)
+    return user.model_dump()
