@@ -17,6 +17,6 @@ class NotificationModel(Base):
     type: Mapped[str] = mapped_column(nullable=False)
     message: Mapped[str] = mapped_column(nullable=False)
     is_read: Mapped[bool] = mapped_column(default=False) 
-    created_at: Mapped[datetime]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     user: Mapped["UserModel"] = relationship(back_populates="notifications")
     product: Mapped["ProductModel"] = relationship(back_populates="notifications")

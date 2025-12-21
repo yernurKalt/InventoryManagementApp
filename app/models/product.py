@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, TYPE_CHECKING
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, null
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -22,8 +22,8 @@ class ProductModel(Base):
     current_stock: Mapped[int] = mapped_column(nullable=False, default=0)
     reorder_level: Mapped[int] = mapped_column(nullable=False, default=0)
     is_active: Mapped[bool] = mapped_column(default=True)
-    created_at: Mapped[datetime]
-    updated_at: Mapped[datetime]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
+    updated_at: Mapped[datetime] = mapped_column(nullable=True)
     category: Mapped["CategoryModel"] = relationship(back_populates="products")
     supplier: Mapped["SupplierModel"] = relationship(back_populates="products")
     stock_movements: Mapped[List["StockMovementModel"]] = relationship(back_populates="product")
