@@ -35,7 +35,7 @@ class BaseDAO():
     @classmethod
     async def get_model_by_name(cls, name: str):
         async with async_session_maker() as session:
-            result = await session.execute(select(cls.model).where(cls.model.name.lower() == name.lower()))
+            result = await session.execute(select(cls.model).where(cls.model.name == name))
             model = result.scalar_one_or_none()
             return model
 
@@ -46,7 +46,7 @@ class BaseDAO():
             result = await session.execute(select(cls.model).where(cls.model.id == id))
             model = result.scalar_one_or_none()
             return model
-
+            
 
     @classmethod
     async def get_updated_model(cls, id: int, **kwargs):

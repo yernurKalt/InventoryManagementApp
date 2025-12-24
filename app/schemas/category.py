@@ -1,6 +1,6 @@
 
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional, TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict
 
 
@@ -18,6 +18,5 @@ class CategoryUpdate(CategoryBase):
 class CategoryOut(CategoryBase):
     id: int
     created_at: datetime
-    updated_at: Optional[datetime] | None = None
-
+    updated_at: Optional[datetime] = None
     model_config = ConfigDict(from_attributes=True)

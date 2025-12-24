@@ -18,3 +18,4 @@ class SupplierModel(Base):
     address: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     updated_at: Mapped[datetime] = mapped_column(nullable=True)
+    products: Mapped[List["ProductModel"]] = relationship(back_populates="supplier", lazy="selectin")

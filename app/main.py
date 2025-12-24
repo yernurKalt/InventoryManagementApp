@@ -14,6 +14,7 @@ from app.routers.auth import router as login_router
 from app.routers.users import router as users_router
 from app.routers.categories import router as categories_router
 from app.routers.suppliers import router as suppliers_router
+from app.routers.products import router as products_router
 from app.schemas.user import UserOut
 
 
@@ -23,3 +24,4 @@ app.include_router(login_router)
 app.include_router(users_router)
 app.include_router(categories_router)
 app.include_router(suppliers_router)
+app.include_router(products_router)

@@ -7,6 +7,7 @@ from app.dao.supplier_dao import SupplierDAO
 from app.models.user import UserModel
 from app.schemas.pagination import Page, PageMeta
 from app.schemas.supplier import SupplierCreate, SupplierOut, SupplierUpdate
+from app.services.pagination_response import pagination_response
 
 
 router = APIRouter(
@@ -17,22 +18,13 @@ router = APIRouter(
 
 @router.get("")
 async def get_all_suppliers(
-    limit: int = Query(20, ge=1, le=100),
+    size: int = Query(20, ge=1, le=100),
     page: int = Query(0, ge = 0),
     name: Optional[str] = None,
     current_user: UserModel = Depends(get_current_user),
     ):
     items = await SupplierDAO.get_all_models(q=name)
-    offset_min = limit * page
-    offset_max = limit * (page + 1)
-    response = items[offset_min: offset_max] + [
-        {
-            "page": page,
-            "limit": limit,
-            "total": math.ceil(len(items) / limit) - 1
-        }
-    ]
-    return response 
+    return pagination_response(arr=items, size=size, page=page)
 
 @router.get("/{id}")
 async def get_supplier_by_id(id: int, current_user: UserModel = Depends(get_current_user)):
@@ -53,7 +45,7 @@ async def create_supplier(supplier: SupplierCreate, admin_user: UserModel = Depe
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail=f"Supplier with name {supplier.name} already exists",
-            header={"WWW-Authenticate": "Bearer"}
+            headers={"WWW-Authenticate": "Bearer"}
         )
     result = await SupplierDAO.add_model(**supplier.model_dump())
     supplier = SupplierOut.model_validate(result)

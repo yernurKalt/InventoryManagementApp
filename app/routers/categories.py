@@ -9,6 +9,7 @@ from app.models import category
 from app.models.user import UserModel
 from app.schemas.category import CategoryCreate, CategoryOut, CategoryUpdate
 from app.schemas.pagination import Page, PageMeta
+from app.services.pagination_response import pagination_response
 
 
 router = APIRouter(
@@ -19,22 +20,13 @@ router = APIRouter(
 
 @router.get("")
 async def get_categories(
-    limit: int = Query(20, ge=1, le=100),
+    size: int = Query(20, ge=1, le=100),
     page: int = Query(0, ge = 0),
     name: Optional[str] = None,
     current_user: UserModel = Depends(get_current_user),
     ):
     items = await CategoryDAO.get_all_models(q=name)
-    offset_min = limit * page
-    offset_max = limit * (page + 1)
-    response = items[offset_min: offset_max] + [
-        {
-            "page": page,
-            "limit": limit,
-            "total": math.ceil(len(items) / limit) - 1
-        }
-    ]
-    return response 
+    return pagination_response(arr=items, size=size, page=page)
 
 @router.get("/{id}")
 async def get_category_by_id(id: int, current_user: UserModel = Depends(get_current_user)):
