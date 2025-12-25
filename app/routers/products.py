@@ -1,5 +1,5 @@
 import math
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -22,7 +22,7 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("", )
 async def get_all_products(
     size: int = Query(20, ge=1, le=100),
     page: int = Query(0, ge=0),
@@ -32,14 +32,17 @@ async def get_all_products(
     is_active: Optional[bool] = None,
     low_stock: bool = False,
     current_user: UserModel = Depends(get_current_user),
-    ):
+    ): 
     products = await ProductDAO.get_all_models(q=name)
     products = filter_products_by_category_and_supplier(products=products, category_id=category_id, supplier_id=supplier_id)
     products = get_active_or_inactive_products(products=products, is_active=is_active)
     products = is_low_stock(products=products, low_stock=low_stock)
-    return pagination_response(arr=products, size=size, page=page)
+    result = []
+    for product in products:
+        result.append(ProductOut.model_validate(product))
+    return pagination_response(arr=result, size=size, page=page)
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=ProductOut)
 async def get_product(id: int, current_user: UserModel = Depends(get_current_user)):
     product = await ProductDAO.get_model_by_id(id=id)
     if product is None:
@@ -51,7 +54,7 @@ async def get_product(id: int, current_user: UserModel = Depends(get_current_use
     product = ProductOut.model_validate(product)
     return product.model_dump()
 
-@router.post("")
+@router.post("", response_model=ProductOut)
 async def add_product(product: ProductCreate, admin_user: UserModel = Depends(require_admin)):
     await product_check(product)
     product = await ProductDAO.add_model(**product.model_dump())
@@ -60,10 +63,28 @@ async def add_product(product: ProductCreate, admin_user: UserModel = Depends(re
      
        
 
-@router.patch("/{id}")
-async def update_product(id: int, update: ProductUpdate, admin_user: UserModel = Depends(require_admin)):
-    pass
+@router.patch("/{id}", response_model=ProductOut)
+async def update_product(id: int, update: Optional[ProductUpdate] = None, admin_user: UserModel = Depends(require_admin)):
+    product = await ProductDAO.get_model_by_id(id=id)
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="product is not found",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    product = await ProductDAO.get_updated_model(id,**update.model_dump())
+    product = ProductOut.model_validate(product)
+    return product.model_dump()
+
 
 @router.delete("/{id}")
 async def delete_product(id: int, admin_user: UserModel = Depends(require_admin)):
-    pass
+    product = await ProductDAO.get_model_by_id(id=id)
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not found",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    await ProductDAO.delete_model_from_db(id=id)
+    return {"message": "product is deleted"}
