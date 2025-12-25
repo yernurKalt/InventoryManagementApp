@@ -57,7 +57,7 @@ async def add_product(product: ProductCreate, admin_user: UserModel = Depends(re
     product = await ProductDAO.add_model(**product.model_dump())
     product = ProductOut.model_validate(await ProductDAO.output_product_addition(product=product))
     return product.model_dump()
-    
+     
     
 
 @router.patch("/{id}")
