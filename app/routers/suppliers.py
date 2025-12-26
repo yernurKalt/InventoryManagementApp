@@ -6,7 +6,7 @@ from app.api.deps import get_current_user, require_admin
 from app.dao.supplier_dao import SupplierDAO
 from app.models.user import UserModel
 from app.schemas.pagination import Page, PageMeta
-from app.schemas.supplier import SupplierCreate, SupplierOut, SupplierUpdate
+from app.schemas.supplier import SupplierCreate, SupplierOut, SupplierOutWithProducts, SupplierUpdate
 from app.services.pagination_response import pagination_response
 
 
@@ -14,7 +14,7 @@ router = APIRouter(
     prefix="/suppliers",
     tags=['suppliers'],
 )
-
+ 
 
 @router.get("")
 async def get_all_suppliers(
@@ -24,7 +24,10 @@ async def get_all_suppliers(
     current_user: UserModel = Depends(get_current_user),
     ):
     items = await SupplierDAO.get_all_models(q=name)
-    return pagination_response(arr=items, size=size, page=page)
+    result = []
+    for item in items:
+        result.append(SupplierOutWithProducts.model_validate(item))
+    return pagination_response(arr=result, size=size, page=page)
 
 @router.get("/{id}")
 async def get_supplier_by_id(id: int, current_user: UserModel = Depends(get_current_user)):
@@ -50,7 +53,7 @@ async def create_supplier(supplier: SupplierCreate, admin_user: UserModel = Depe
     result = await SupplierDAO.add_model(**supplier.model_dump())
     supplier = SupplierOut.model_validate(result)
     return supplier.model_dump()
-
+ 
 @router.patch("/{id}")
 async def update_supplier(id: int, update: SupplierUpdate, admin_user: UserModel = Depends(require_admin)):
     if update.name:

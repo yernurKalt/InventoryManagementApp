@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import jwt
+import app.schemas
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
@@ -21,7 +22,7 @@ from app.schemas.user import UserOut
 app = FastAPI()
 
 app.include_router(login_router)
-app.include_router(users_router)
+app.include_router(users_router) 
 app.include_router(categories_router)
 app.include_router(suppliers_router)
 app.include_router(products_router)

@@ -2,8 +2,8 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 from pydantic import BaseModel, ConfigDict
-from app.schemas.supplier import SupplierOut
 from app.schemas.category import CategoryOut
+from app.schemas.supplier import SupplierOut
 
 
 class ProductBase(BaseModel):
@@ -37,4 +37,18 @@ class ProductOut(ProductBase):
     supplier: SupplierOut
     updated_at: Optional[datetime] = None
     
+    model_config = ConfigDict(from_attributes=True)
+
+class ProductinCategoryAndSupplier(BaseModel):
+    id: int
+    name: str
+    sku: str
+    description: Optional[str] = None
+    unit_price: float
+    current_stock: int
+    reorder_level: int
+    is_active: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
     model_config = ConfigDict(from_attributes=True)

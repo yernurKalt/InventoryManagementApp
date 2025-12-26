@@ -61,7 +61,7 @@ async def add_product(product: ProductCreate, admin_user: UserModel = Depends(re
     product = ProductOut.model_validate(await ProductDAO.output_product_addition(product=product))
     return product.model_dump()
      
-       
+  
 
 @router.patch("/{id}", response_model=ProductOut)
 async def update_product(id: int, update: Optional[ProductUpdate] = None, admin_user: UserModel = Depends(require_admin)):
@@ -75,7 +75,7 @@ async def update_product(id: int, update: Optional[ProductUpdate] = None, admin_
     product = await ProductDAO.get_updated_model(id,**update.model_dump())
     product = ProductOut.model_validate(product)
     return product.model_dump()
-
+     
 
 @router.delete("/{id}")
 async def delete_product(id: int, admin_user: UserModel = Depends(require_admin)):

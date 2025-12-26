@@ -1,7 +1,12 @@
 
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING, List, Optional
 from pydantic import BaseModel, ConfigDict, EmailStr
+
+
+if TYPE_CHECKING:
+    from app.schemas.product import ProductinCategoryAndSupplier
+
 
 
 class SupplierBase(BaseModel):
@@ -23,5 +28,14 @@ class SupplierOut(SupplierBase):
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class SupplierOutWithProducts(SupplierBase):
+    id: int
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    #products: List["ProductinCategoryAndSupplier"]
 
     model_config = ConfigDict(from_attributes=True)

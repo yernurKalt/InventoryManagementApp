@@ -1,13 +1,13 @@
 from datetime import datetime, timezone
 import math
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.api.deps import get_current_user, require_admin
 from app.dao.category_dao import CategoryDAO
 from app.models import category
 from app.models.user import UserModel
-from app.schemas.category import CategoryCreate, CategoryOut, CategoryUpdate
+from app.schemas.category import CategoryCreate, CategoryOut, CategoryOutWithProducts, CategoryUpdate
 from app.schemas.pagination import Page, PageMeta
 from app.services.pagination_response import pagination_response
 
@@ -25,8 +25,12 @@ async def get_categories(
     name: Optional[str] = None,
     current_user: UserModel = Depends(get_current_user),
     ):
+    #pass
     items = await CategoryDAO.get_all_models(q=name)
-    return pagination_response(arr=items, size=size, page=page)
+    result = []
+    for item in items:
+        result.append(CategoryOutWithProducts.model_validate(item))
+    return pagination_response(arr=result, size=size, page=page)
 
 @router.get("/{id}")
 async def get_category_by_id(id: int, current_user: UserModel = Depends(get_current_user)):
