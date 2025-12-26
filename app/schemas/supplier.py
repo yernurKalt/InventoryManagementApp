@@ -36,6 +36,6 @@ class SupplierOutWithProducts(SupplierBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
-    #products: List["ProductinCategoryAndSupplier"]
+    products: List["ProductinCategoryAndSupplier"]
 
     model_config = ConfigDict(from_attributes=True)
