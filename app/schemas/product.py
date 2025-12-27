@@ -2,6 +2,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 from pydantic import BaseModel, ConfigDict
+
 from app.schemas.category import CategoryOut
 from app.schemas.supplier import SupplierOut
 
