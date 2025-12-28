@@ -58,7 +58,7 @@ async def get_product(id: int, current_user: UserModel = Depends(get_current_use
 async def add_product(product: ProductCreate, admin_user: UserModel = Depends(require_admin)):
     await product_check(product)
     product = await ProductDAO.add_model(**product.model_dump())
-    product = ProductOut.model_validate(await ProductDAO.output_product_addition(product=product))
+    product = ProductOut.model_validate(await ProductDAO.output_product_addition(product))
     return product.model_dump()
      
   

@@ -38,7 +38,7 @@ async def get_supplier_by_id(id: int, current_user: UserModel = Depends(get_curr
             detail=f"Could not find supplier with id {id}",
             headers={"WWW-Authenticate": "Bearer"}
         )
-    supplier = SupplierOut.model_validate(supplier)
+    supplier = SupplierOutWithProducts.model_validate(supplier)
     return supplier.model_dump()
 
 @router.post("")
@@ -65,7 +65,7 @@ async def update_supplier(id: int, update: SupplierUpdate, admin_user: UserModel
                 headers={"WWW-Authenticate": "Bearer"}
             )
     supplier = await SupplierDAO.get_updated_model(id, **update.model_dump())
-    supplier = SupplierOut.model_validate(supplier)
+    supplier = SupplierOutWithProducts.model_validate(supplier)
     return supplier.model_dump()
 
 

@@ -41,7 +41,7 @@ async def get_category_by_id(id: int, current_user: UserModel = Depends(get_curr
             detail=f"Could not find category with id {id}",
             headers={"WWW-Authenticate": "Bearer"}
         )
-    category = CategoryOut.model_validate(category)
+    category = CategoryOutWithProducts.model_validate(category)
     return category.model_dump()
 
  
@@ -69,7 +69,7 @@ async def update_category(id: int, update: CategoryUpdate, admin_user: UserModel
                 headers={"WWW-Authenticate": "Bearer"}
             )
     category = await CategoryDAO.get_updated_model(id, **update.model_dump())
-    category = CategoryOut.model_validate(category)
+    category = CategoryOutWithProducts.model_validate(category)
     return category.model_dump()
 
 
