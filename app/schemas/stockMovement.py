@@ -16,7 +16,7 @@ class StockMovementCreate(StockMovementBase):
 
 class StockMovementOut(StockMovementBase):
     id: int
-    perfromed_by: int
+    performed_by: int
     created_at: datetime
     
 

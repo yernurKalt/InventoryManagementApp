@@ -16,6 +16,7 @@ from app.routers.users import router as users_router
 from app.routers.categories import router as categories_router
 from app.routers.suppliers import router as suppliers_router
 from app.routers.products import router as products_router
+from app.routers.stock_movements import router as stock_movements_router
 from app.schemas.user import UserOut
 
 
@@ -26,3 +27,4 @@ app.include_router(users_router)
 app.include_router(categories_router)
 app.include_router(suppliers_router)
 app.include_router(products_router)
+app.include_router(stock_movements_router)
