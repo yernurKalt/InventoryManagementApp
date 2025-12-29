@@ -46,6 +46,14 @@ class BaseDAO():
             result = await session.execute(select(cls.model).where(cls.model.id == id))
             model = result.scalar_one_or_none()
             return model
+
+
+    @classmethod
+    async def get_model_by_id_with_lock(cls, id: int):
+        async with async_session_maker() as session:
+            result = await session.execute(select(cls.model).where(cls.model.id == id).with_for_update())
+            model = result.scalar_one_or_none()
+            return model
             
 
     @classmethod

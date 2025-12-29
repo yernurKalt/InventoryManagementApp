@@ -18,5 +18,5 @@ class StockMovementModel(Base):
     notes: Mapped[str] = mapped_column(nullable=True)
     performed_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
-    user: Mapped['UserModel'] = relationship(back_populates="stock_movements")
-    product: Mapped['ProductModel'] = relationship(back_populates="stock_movements")
+    user: Mapped['UserModel'] = relationship(back_populates="stock_movements", lazy="joined")
+    product: Mapped['ProductModel'] = relationship(back_populates="stock_movements", lazy="joined")

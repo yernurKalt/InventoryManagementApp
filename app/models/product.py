@@ -27,3 +27,4 @@ class ProductModel(Base):
     updated_at: Mapped[datetime] = mapped_column(nullable=True)
     category: Mapped["CategoryModel"] = relationship(back_populates="products", lazy="joined")
     supplier: Mapped["SupplierModel"] = relationship(back_populates="products", lazy="joined")
+    stock_movements: Mapped[List["StockMovementModel"]] = relationship(back_populates="product", lazy="selectin")
