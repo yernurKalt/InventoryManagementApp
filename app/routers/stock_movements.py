@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.api.deps import get_current_user
-from app.dao.product_dao import ProductDAO
 from app.dao.stock_movement_dao import StockMovementDAO
 from app.models.user import UserModel
 from app.schemas.stockMovement import StockMovementCreate, StockMovementOut
@@ -29,4 +28,10 @@ async def get_movements(current_user: UserModel = Depends(get_current_user)):
 
 @router.get("{id}")
 async def get_movement(id: int, current_user: UserModel = Depends(get_current_user)):
-    pass
+    movement = await StockMovementDAO.get_model_by_id(id)
+    if movement is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Movement is not found"
+        )
+    return StockMovementOut.model_validate(movement).model_dump()
