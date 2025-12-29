@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.api.deps import get_current_user
 from app.dao.stock_movement_dao import StockMovementDAO
 from app.models.user import UserModel
 from app.schemas.stockMovement import StockMovementCreate, StockMovementOut
+from app.services.pagination_response import pagination_response
 from app.services.stock_movement_service import stock_movement_service
 
 
@@ -23,8 +24,17 @@ async def create_movement(stock_movement: StockMovementCreate,current_user: User
     
 
 @router.get("")
-async def get_movements(current_user: UserModel = Depends(get_current_user)):
-    pass
+async def get_movements(
+    size: int = Query(20, ge=1, le=100),
+    page: int = Query(0, ge=0),
+    current_user: UserModel = Depends(get_current_user)
+    ):
+    results = await StockMovementDAO.get_all_models()
+    movements = []
+    for result in results:
+        movements.append(StockMovementOut.model_validate(result))
+    return pagination_response(arr=movements, size=size, page=page)
+
 
 @router.get("{id}")
 async def get_movement(id: int, current_user: UserModel = Depends(get_current_user)):
