@@ -11,7 +11,7 @@ async def stock_movement_service(new_movement: StockMovementCreate):
             headers={"WWW-Authenticate": "Bearer"}
         )
     
-    product = await ProductDAO.get_model_by_id(new_movement.product_id)
+    product = await ProductDAO.get_model_by_id_with_lock(new_movement.product_id)
     if product is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

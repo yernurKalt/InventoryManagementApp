@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 from sqlalchemy import delete, func, select
 from app.db.db import async_session_maker
+from app.models.product import ProductModel
 
 
 class BaseDAO():
@@ -51,7 +52,7 @@ class BaseDAO():
     @classmethod
     async def get_model_by_id_with_lock(cls, id: int):
         async with async_session_maker() as session:
-            result = await session.execute(select(cls.model).where(cls.model.id == id).with_for_update())
+            result = await session.execute(select(cls.model).where(cls.model.id == id).with_for_update(of=ProductModel))
             model = result.scalar_one_or_none()
             return model
             

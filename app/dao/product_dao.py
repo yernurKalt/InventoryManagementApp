@@ -30,7 +30,6 @@ class ProductDAO(BaseDAO):
         async with async_session_maker() as session:
             product = await session.execute(select(ProductModel).where(ProductModel.id == product_id))
             product = product.scalar_one_or_none()
-            print(product.current_stock)
             product.current_stock = stock
             await session.commit()
             
