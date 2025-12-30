@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 
+
 class StockMovementBase(BaseModel):
     product_id: int
     quantity: int
@@ -18,6 +19,5 @@ class StockMovementOut(StockMovementBase):
     id: int
     performed_by: int
     created_at: datetime
-    
 
     model_config = ConfigDict(from_attributes=True)
