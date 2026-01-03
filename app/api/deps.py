@@ -13,7 +13,6 @@ async def get_current_user(token_data: TokenPayload = Depends(decode_and_validat
         
 
         if user is None:
-            print("HELLO WORLD")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="user not found",
