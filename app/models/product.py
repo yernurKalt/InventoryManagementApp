@@ -28,3 +28,4 @@ class ProductModel(Base):
     category: Mapped["CategoryModel"] = relationship(back_populates="products", lazy="joined")
     supplier: Mapped["SupplierModel"] = relationship(back_populates="products", lazy="joined")
     stock_movements: Mapped[List["StockMovementModel"]] = relationship(back_populates="product", lazy="selectin")
+    notifications: Mapped[List["NotificationModel"]] = relationship(back_populates="product", lazy="selectin")

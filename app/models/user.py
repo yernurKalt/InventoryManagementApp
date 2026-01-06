@@ -20,4 +20,5 @@ class UserModel(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     updated_at: Mapped[datetime] = mapped_column(nullable=True)
     stock_movements: Mapped[List["StockMovementModel"]] = relationship(back_populates="user", lazy="selectin")
+    notifications: Mapped[List["NotificationModel"]] = relationship(back_populates="user", lazy="selectin")
      
