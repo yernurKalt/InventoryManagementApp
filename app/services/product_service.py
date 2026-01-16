@@ -69,8 +69,9 @@ async def product_check(product: ProductCreate):
         )
     old_product = await ProductDAO.get_model_by_name(product.name) or await ProductDAO.find_product_by_sku(sku=product.sku)
     if old_product:
+        print(old_product.name, product.name)
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Product with that already exists",
+            detail="Product with that name or sku already exists",
             headers={"WWW-Authenticate": "Bearer"}
         )

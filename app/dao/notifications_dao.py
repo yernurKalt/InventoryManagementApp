@@ -31,3 +31,10 @@ class NotificationsDAO(BaseDAO):
                 notification.is_read = True
             await session.commit()
             return notifications
+
+    @classmethod
+    async def get_by_dedupe_key(cls, dedupe_key: str):
+        async with async_session_maker() as session:
+            notification = await session.execute(select(NotificationModel).where(NotificationModel.dedupe_key == dedupe_key))
+            notification = notification.scalar_one_or_none()
+            return notification

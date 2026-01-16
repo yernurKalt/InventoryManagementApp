@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy import select
 from app.core.security.password import hash_password
 from app.db.db import async_session_maker
@@ -16,9 +17,16 @@ async def deactivate_user_by_id(id: int) -> UserModel:
     async with async_session_maker() as session:
         result = await session.execute(select(UserModel).where(UserModel.id == id))
         user = result.scalar_one_or_none()
-        if user:
+        if user: 
             user.is_active = False
             await session.commit()
+
+
+async def get_admins_users() -> List[UserModel]:
+    async with async_session_maker() as session:
+        result = await session.execute(select(UserModel).where(UserModel.role == "admin"))
+        users = result.scalars().all()
+        return users
 
 
 

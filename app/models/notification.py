@@ -20,3 +20,4 @@ class NotificationModel(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     user: Mapped["UserModel"] = relationship(back_populates="notifications")
     product: Mapped["ProductModel"] = relationship(back_populates="notifications")
+    dedupe_key: Mapped[str] = mapped_column(nullable=False, unique=True)
