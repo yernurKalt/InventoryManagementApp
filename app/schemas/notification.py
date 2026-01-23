@@ -10,11 +10,13 @@ class NotificationBase(BaseModel):
     product_id: int
     user_id: int
     dedupe_key: str
+    status: str
 
 class NotificationOut(NotificationBase):
     id: int
     is_read: bool
     created_at: datetime
+    sent_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 

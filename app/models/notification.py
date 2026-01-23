@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.db import Base
-if TYPE_CHECKING:
-    from app.models.user import UserModel
-    from app.models.product import ProductModel
+from app.models.user import UserModel
+from app.models.product import ProductModel
 
 
 class NotificationModel(Base):
@@ -18,6 +17,8 @@ class NotificationModel(Base):
     message: Mapped[str] = mapped_column(nullable=False)
     is_read: Mapped[bool] = mapped_column(default=False) 
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
-    user: Mapped["UserModel"] = relationship(back_populates="notifications")
-    product: Mapped["ProductModel"] = relationship(back_populates="notifications")
+    user: Mapped["UserModel"] = relationship(back_populates="notifications", lazy="joined")
+    product: Mapped["ProductModel"] = relationship(back_populates="notifications", lazy="joined")
     dedupe_key: Mapped[str] = mapped_column(nullable=False, unique=True)
+    status: Mapped[str] = mapped_column()
+    sent_at: Mapped[datetime] = mapped_column(nullable=True)

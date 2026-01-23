@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import jwt
+from app.queue.enqueue import enqueue_send_notification
 import app.schemas
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -18,6 +19,7 @@ from app.routers.suppliers import router as suppliers_router
 from app.routers.products import router as products_router
 from app.routers.stock_movements import router as stock_movements_router
 from app.routers.notifications import router as notifications_router
+from app.routers.webhook import router as webhook_router
 from app.schemas.user import UserOut
 
 
@@ -30,3 +32,10 @@ app.include_router(suppliers_router)
 app.include_router(products_router)
 app.include_router(stock_movements_router)
 app.include_router(notifications_router)
+app.include_router(webhook_router)
+
+
+@app.post("/dev/enqueue-test")
+def enqueue_test(notification_id: int = 123):
+    task_id = enqueue_send_notification(notification_id)
+    return task_id

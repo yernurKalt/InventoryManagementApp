@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     @computed_field
     def DATABASE_URL(self) -> str:
         return (f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}')
+    
+    @computed_field
+    def SYNC_DATABASE_URL(self) -> str:
+        return (f'postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}')
 
     @computed_field
     def KEY(self) -> str:

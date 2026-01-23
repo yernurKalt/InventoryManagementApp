@@ -3,8 +3,9 @@ from typing import List, TYPE_CHECKING
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.db import Base
+from app.models.stock_movement import StockMovementModel
 if TYPE_CHECKING:
-    from app.models.stock_movement import StockMovementModel
+
     from app.models.notification import NotificationModel
 
 

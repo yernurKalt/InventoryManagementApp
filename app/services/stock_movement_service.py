@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from app.dao.notifications_dao import NotificationsDAO
 from app.dao.product_dao import ProductDAO
 from app.dao.user_dao import get_admins_users
+from app.queue.enqueue import enqueue_send_notification
 from app.schemas.notification import NotificationBase
 from app.schemas.stockMovement import StockMovementCreate
 from app.services.low_stock_service import low_stock_service
@@ -49,9 +50,13 @@ async def stock_movement_service(new_movement: StockMovementCreate):
                         product_id=product.id,
                         user_id=user.id,
                         dedupe_key=dedupe_key,
-                        type="LOW_STOCK"
+                        type="LOW_STOCK",
+                        status="pending",
                     )
                     await NotificationsDAO.add_model(**new_notification.model_dump())
+                    notif = await NotificationsDAO.get_by_dedupe_key(dedupe_key=dedupe_key)
+                    if notif:
+                        enqueue_send_notification(notif.id)
                     
     if new_movement.movement_type == "IN":
         new_stock = product.current_stock + new_movement.quantity

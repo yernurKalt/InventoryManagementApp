@@ -3,10 +3,10 @@ from typing import List, TYPE_CHECKING
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, null
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.db import Base
+from app.models.category import CategoryModel
+from app.models.supplier import SupplierModel
 
 if TYPE_CHECKING:
-    from app.models.category import CategoryModel
-    from app.models.supplier import SupplierModel
     from app.models.stock_movement import StockMovementModel
     from app.models.notification import NotificationModel
 

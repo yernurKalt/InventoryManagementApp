@@ -3,9 +3,9 @@ from datetime import datetime, timezone
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func, null
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.db import Base
+from app.models.product import ProductModel
 if TYPE_CHECKING:
     from app.models.user import UserModel
-    from app.models.product import ProductModel
 
 class StockMovementModel(Base):
     __tablename__ = "stock_movements"

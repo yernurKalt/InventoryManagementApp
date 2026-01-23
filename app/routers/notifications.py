@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from starlette.status import HTTP_404_NOT_FOUND
 
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, require_admin
 from app.dao.notifications_dao import NotificationsDAO
 from app.models.user import UserModel
 from app.schemas.notification import NotificationOut
@@ -69,3 +69,9 @@ async def read_all_notifications(current_user: UserModel = Depends(get_current_u
     for notification in notifications:
         result.append(NotificationOut.model_validate(notification).model_dump)
     return result
+
+@router.delete("")
+async def delete_all_notification(current_user: UserModel = Depends(require_admin)):
+    notifications = await NotificationsDAO.get_all_models()
+    for notification in notifications:
+        await NotificationsDAO.delete_model_from_db(notification.id)
