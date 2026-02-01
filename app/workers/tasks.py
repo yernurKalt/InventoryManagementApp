@@ -13,7 +13,6 @@ def send_notification(self, noitification_id: int) -> str:
     try:
         
         notif = session.get(NotificationModel, noitification_id)
-        print(notif)
         if not notif:
             return "noop:not_found"
         

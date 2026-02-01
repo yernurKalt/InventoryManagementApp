@@ -17,6 +17,7 @@ from app.models.product import ProductModel
 from app.models.stock_movement import StockMovementModel
 from app.models.notification import NotificationModel
 from app.models.webhook import WebhookSubscriptionModel
+from app.models.reports import ReportModel
 
 
 # this is the Alembic Config object, which provides
