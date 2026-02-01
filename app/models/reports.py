@@ -6,7 +6,7 @@ class ReportModel(Base):
     __tablename__ = "reports"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    report_type: Mapped[str] = mapped_column(nullable=False)
+    report_type: Mapped[str] = mapped_column(nullable=True)
     period_start: Mapped[datetime] = mapped_column(nullable=False)
     period_end: Mapped[datetime] = mapped_column(nullable=False)
     format: Mapped[datetime] = mapped_column(nullable=False)
