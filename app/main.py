@@ -20,6 +20,7 @@ from app.routers.products import router as products_router
 from app.routers.stock_movements import router as stock_movements_router
 from app.routers.notifications import router as notifications_router
 from app.routers.webhook import router as webhook_router
+from app.routers.reports import router as reports_router
 from app.schemas.user import UserOut
 
 
@@ -33,6 +34,7 @@ app.include_router(products_router)
 app.include_router(stock_movements_router)
 app.include_router(notifications_router)
 app.include_router(webhook_router)
+app.include_router(reports_router)
 
 
 @app.post("/dev/enqueue-test")

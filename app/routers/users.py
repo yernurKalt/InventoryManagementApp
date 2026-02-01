@@ -32,6 +32,19 @@ async def create_employee_accounts(
         user = UserOut.model_validate(result)
         return user.model_dump()
 
+@router.post("/admin_user")
+async def create_admin_user(user: UserCreate):
+    async with async_session_maker() as session:
+        old_user = await get_user_by_email(user.email)
+        if old_user:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User already exists",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+        result = await create_user(**user.model_dump())
+        user = UserOut.model_validate(result)
+        return user.model_dump()
 
 @router.get("/me")
 async def me(current_user: UserModel = Depends(get_current_user)):

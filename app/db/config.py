@@ -11,7 +11,11 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     JWT_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REDIS_URL: str
     model_config = SettingsConfigDict(env_file=".env")
+    POSTGRES_DB: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
 
     @computed_field
     def DATABASE_URL(self) -> str:
@@ -32,6 +36,10 @@ class Settings(BaseSettings):
     @computed_field
     def EXPIRE_MINUTES(self) -> int:
         return self.ACCESS_TOKEN_EXPIRE_MINUTES
+
+    @computed_field
+    def REDIS_URL_VALUE(self) -> str:
+        return self.REDIS_URL
 
 
 settings = Settings()

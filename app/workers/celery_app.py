@@ -1,7 +1,9 @@
 import os
 from celery import Celery
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+from app.db.config import settings
+
+REDIS_URL = settings.REDIS_URL_VALUE
 
 app = Celery(
     "ims_worker",

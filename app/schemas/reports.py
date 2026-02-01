@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict
 class ReportGenerateRequest(BaseModel):
     period_start: datetime
     period_end: datetime
-    format: str
+    format: Optional[str] = None
     report_type: Optional[str] = None
 
 
