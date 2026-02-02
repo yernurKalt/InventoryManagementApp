@@ -10,6 +10,7 @@ router = APIRouter(
 
 @router.post("")
 async def webhook(request: Request):
+    print("some error occured")
     payload = await request.json()
 
     print("\n========== WEBHOOK RECEIVED ==========")

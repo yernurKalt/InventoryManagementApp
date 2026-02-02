@@ -11,7 +11,7 @@ from app.workers.delivery.webhook import send_webhook
 def send_notification(self, noitification_id: int) -> str:
     session = get_sync_session()
     try:
-        
+
         notif = session.get(NotificationModel, noitification_id)
         if not notif:
             return "noop:not_found"

@@ -1,6 +1,8 @@
 import httpx
 
-WEBHOOK_URL = "http://127.0.0.1:8000/dev/webhook"
+from app.db.config import settings
+
+WEBHOOK_URL = settings.WEBHOOK_URL_VALUE
 
 
 def send_webhook(payload: dict) -> None:
@@ -8,6 +10,8 @@ def send_webhook(payload: dict) -> None:
         raise RuntimeError("WebHook is not set")
 
     with httpx.Client(timeout=10.0) as client:
+        print(payload)
+        print("there is the mistake")
         resp = client.post(WEBHOOK_URL, json=payload)
 
     if resp.status_code < 200 or resp.status_code >= 300:

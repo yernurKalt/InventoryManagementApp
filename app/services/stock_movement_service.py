@@ -56,6 +56,7 @@ async def stock_movement_service(new_movement: StockMovementCreate):
                     await NotificationsDAO.add_model(**new_notification.model_dump())
                     notif = await NotificationsDAO.get_by_dedupe_key(dedupe_key=dedupe_key)
                     if notif:
+                        print("WE MIGHT BE HERE")
                         enqueue_send_notification(notif.id)
                     
     if new_movement.movement_type == "IN":

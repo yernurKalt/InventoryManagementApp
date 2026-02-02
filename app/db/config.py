@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
+    WEBHOOK_URL: str
 
     @computed_field
     def DATABASE_URL(self) -> str:
@@ -40,6 +41,10 @@ class Settings(BaseSettings):
     @computed_field
     def REDIS_URL_VALUE(self) -> str:
         return self.REDIS_URL
+
+    @computed_field
+    def WEBHOOK_URL_VALUE(self) -> str:
+        return self.WEBHOOK_URL
 
 
 settings = Settings()
